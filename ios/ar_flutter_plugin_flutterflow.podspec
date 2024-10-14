@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint ar_flutter_plugin_flutterflow.podspec` to validate before publishing.
+# Run `pod lib lint ar_flutter_plugin_updated.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'ar_flutter_plugin_flutterflow'
+  s.name             = 'ar_flutter_plugin_updated'
   s.version          = '0.6.2'
   s.summary          = 'A Flutter plugin for shared AR experiences.'
   s.description      = <<-DESC

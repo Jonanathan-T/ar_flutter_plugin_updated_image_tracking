@@ -1,6 +1,6 @@
-import 'package:ar_flutter_plugin_flutterflow/datatypes/anchor_types.dart';
-import 'package:ar_flutter_plugin_flutterflow/models/ar_node.dart';
-import 'package:ar_flutter_plugin_flutterflow/utils/json_converters.dart';
+import 'package:ar_flutter_plugin_updated/datatypes/anchor_types.dart';
+import 'package:ar_flutter_plugin_updated/models/ar_node.dart';
+import 'package:ar_flutter_plugin_updated/utils/json_converters.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:flutter/widgets.dart';
 

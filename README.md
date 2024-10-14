@@ -1,5 +1,5 @@
-# ar_flutter_plugin_flutterflow
-[![pub package](https://img.shields.io/pub/v/ar_flutter_plugin_flutterflow.svg)](https://pub.dev/packages/ar_flutter_plugin_flutterflow)
+# ar_flutter_plugin_updated
+[![pub package](https://img.shields.io/pub/v/ar_flutter_plugin_updated.svg)](https://pub.dev/packages/ar_flutter_plugin_updated)
 
 
 
@@ -8,7 +8,7 @@ This fork was created because the original plugin had not been updated since 202
 
 Key Features:
 
-FlutterFlow Compatibility: This version has been specifically adjusted to ensure seamless integration with FlutterFlow, enabling developers to incorporate augmented reality features into their FlutterFlow projects without any compatibility issues.
+This version has been specifically adjusted to ensure seamless integration with FlutterFlow, enabling developers to incorporate augmented reality features into their FlutterFlow projects without any compatibility issues.
 
 
 
@@ -29,15 +29,15 @@ Also, remember to replace 'Geoflutterfire()' with 'GeoFlutterFire()' in your cod
 Add the Flutter package to your project by running:
 
 ```bash
-flutter pub add ar_flutter_plugin_flutterflow
+flutter pub add ar_flutter_plugin_updated
 ```
 
 Or manually add this to your `pubspec.yaml` file (and run `flutter pub get`):
-# ar_flutter_plugin_flutterflow package extension
+# ar_flutter_plugin_updated package extension
 
 ```yaml
 dependencies:
-  ar_flutter_plugin_flutterflow: ^0.7.47
+  ar_flutter_plugin_updated: ^0.0.1
 ```
 
 ### Importing
@@ -45,5 +45,16 @@ dependencies:
 Add this to your code:
 
 ```dart
-import 'package:ar_flutter_plugin_flutterflow/ar_flutter_plugin.dart';
+import 'package:ar_flutter_plugin_updated/ar_flutter_plugin.dart';
+import 'package:ar_flutter_plugin_updated/datatypes/config_planedetection.dart';
+import 'package:ar_flutter_plugin_updated/datatypes/hittest_result_types.dart';
+import 'package:ar_flutter_plugin_updated/datatypes/node_types.dart';
+import 'package:ar_flutter_plugin_updated/managers/ar_anchor_manager.dart';
+import 'package:ar_flutter_plugin_updated/managers/ar_location_manager.dart';
+import 'package:ar_flutter_plugin_updated/managers/ar_object_manager.dart';
+import 'package:ar_flutter_plugin_updated/managers/ar_session_manager.dart';
+import 'package:ar_flutter_plugin_updated/models/ar_anchor.dart';
+import 'package:ar_flutter_plugin_updated/models/ar_hittest_result.dart';
+import 'package:ar_flutter_plugin_updated/models/ar_node.dart';
+import 'package:ar_flutter_plugin_updated/widgets/ar_view.dart';
 ```
