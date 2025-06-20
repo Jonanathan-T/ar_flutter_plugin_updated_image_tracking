@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -39,6 +40,10 @@ import com.google.ar.sceneform.rendering.*
 import android.view.ViewGroup
 
 import com.google.ar.core.TrackingState
+
+import com.google.ar.core.AugmentedImage
+import com.google.ar.core.AugmentedImageDatabase
+// import android.graphics.BitmapFactory
 
 
 
@@ -490,7 +495,6 @@ internal class AndroidARView(
         val argHandlePans: Boolean? = call.argument<Boolean>("handlePans")
         val argShowAnimatedGuide: Boolean? = call.argument<Boolean>("showAnimatedGuide")
 
-
         sceneUpdateListener = com.google.ar.sceneform.Scene.OnUpdateListener {
             frameTime: FrameTime -> onFrame(frameTime)
         }
@@ -553,6 +557,7 @@ internal class AndroidARView(
                 config?.planeFindingMode = Config.PlaneFindingMode.DISABLED
             }
         }
+        config?.setAugmentedImageDatabase(createAugmentedImageDatabase())
         arSceneView.session?.configure(config)
 
         // Configure whether or not detected planes should be shown
@@ -685,6 +690,35 @@ internal class AndroidARView(
             }
         }
 
+        // Ajoutez la détection d'image
+        val updatedAugmentedImages = arSceneView.arFrame!!.getUpdatedTrackables(AugmentedImage::class.java)
+        for (augmentedImage in updatedAugmentedImages) {
+            when (augmentedImage.trackingState) {
+                TrackingState.TRACKING -> {
+                    if (augmentedImage.trackingMethod == AugmentedImage.TrackingMethod.FULL_TRACKING) {
+                        // Image détectée et suivie
+                        val imageInfo = HashMap<String, Any>()
+                        imageInfo["name"] = augmentedImage.name
+                        imageInfo["index"] = augmentedImage.index
+                        imageInfo["extentX"] = augmentedImage.extentX
+                        imageInfo["extentZ"] = augmentedImage.extentZ
+                        imageInfo["centerPose"] = serializePose(augmentedImage.centerPose)
+                        
+                        // Envoyer l'événement à Flutter
+                        sessionManagerChannel.invokeMethod("onImageRecognized", imageInfo)
+                    }
+                }
+                TrackingState.PAUSED -> {
+                    // Image perdue
+                    val imageInfo = HashMap<String, Any>()
+                    imageInfo["name"] = augmentedImage.name
+                    imageInfo["index"] = augmentedImage.index
+                    imageInfo["trackingState"] = "PAUSED"
+                    sessionManagerChannel.invokeMethod("onImageLost", imageInfo)
+                }
+                else -> {}
+            }
+        }
     }
 
     private fun addNode(dict_node: HashMap<String, Any>, dict_anchor: HashMap<String, Any>? = null): CompletableFuture<Boolean>{
@@ -947,6 +981,22 @@ internal class AndroidARView(
                 }
             })
         }
+    }
+
+    private fun createAugmentedImageDatabase(): AugmentedImageDatabase {
+        val augmentedImageDatabase = AugmentedImageDatabase(arSceneView.session)
+        
+        // Pour chaque image à détecter, ajoutez-la à la base de données
+        // Par exemple, si vous avez une image dans les assets :
+        val loader: FlutterLoader = FlutterInjector.instance().flutterLoader()
+        val imageKey: String = loader.getLookupKeyForAsset("assets/tracked_image.jpg")
+        val inputStream = viewContext.assets.open(imageKey)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        
+        // Ajoutez l'image à la base de données avec un nom unique
+        augmentedImageDatabase.addImage("image_name", bitmap)
+        
+        return augmentedImageDatabase
     }
 
 }

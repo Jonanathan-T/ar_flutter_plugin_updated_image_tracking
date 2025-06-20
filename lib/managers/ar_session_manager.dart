@@ -14,6 +14,11 @@ typedef ARHitResultHandler = void Function(List<ARHitTestResult> hits);
 typedef ARPlaneResultHandler = void Function(int planeCount);
 typedef ErrorHandler = void Function(String error);
 
+// Image recognition handlers
+typedef ARImageRecognizedHandler = void Function(
+    Map<String, dynamic> imageInfo);
+typedef ARImageLostHandler = void Function(Map<String, dynamic> imageInfo);
+
 /// Manages the session configuration, parameters and events of an [ARView]
 class ARSessionManager {
   /// Platform channel used for communication from and to [ARSessionManager]
@@ -37,6 +42,12 @@ class ARSessionManager {
   /// Callback that is triggered once error is triggered
   ErrorHandler? onError;
 
+  /// Callback qui est déclenché lorsqu'une image est reconnue
+  ARImageRecognizedHandler? onImageRecognized;
+
+  /// Callback qui est déclenché lorsqu'une image est perdue
+  ARImageLostHandler? onImageLost;
+
   ARSessionManager(int id, this.buildContext, this.planeDetectionConfig,
       {this.debug = false}) {
     _channel = MethodChannel('arsession_$id');
@@ -56,6 +67,10 @@ class ARSessionManager {
       print('Error caught: ' + e.toString());
       return null;
     }
+  }
+
+  void odcARFlutter() {
+    print("odcARFlutter");
   }
 
   /// Returns the given anchor pose in Matrix4 format with respect to the world coordinate system of the [ARView]
@@ -168,6 +183,19 @@ class ARSessionManager {
           break;
         case 'dispose':
           _channel.invokeMethod<void>("dispose");
+          break;
+        case 'onImageRecognized':
+          if (onImageRecognized != null) {
+            final imageInfo = Map<String, dynamic>.from(call.arguments);
+            onImageRecognized!(imageInfo);
+          }
+          break;
+
+        case 'onImageLost':
+          if (onImageLost != null) {
+            final imageInfo = Map<String, dynamic>.from(call.arguments);
+            onImageLost!(imageInfo);
+          }
           break;
         default:
           if (debug) {
