@@ -23,7 +23,7 @@ Fonctionnalité ajoutée :
 
 ```yaml
 dependencies:
-  ar_flutter_plugin_updated_image_tracking:
+  ar_flutter_plugin_updated:
     git:
       url: https://github.com/Jonanathan-T/ar_flutter_plugin_updated_image_tracking.git
 ````
